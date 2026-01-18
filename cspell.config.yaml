@@ -1,0 +1,10 @@
+version: "0.2"
+language: en
+ignorePaths:
+  - go.mod
+  - go.sum
+  - .gitignore
+  - cspell.config.yaml
+words:
+  - stretchr
+  - Zauberhaus
