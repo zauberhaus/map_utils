@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/zauberhaus/map_utils/compare/v1.0.1...v1.1.0) (2026-01-18)
+
+
+### Features
+
+* add flatten function ([1bb34db](https://github.com/zauberhaus/map_utils/commit/1bb34db09e452bcebef764300fed8ec162ef45ba))
+
 ## [1.0.1](https://github.com/zauberhaus/map_utils/compare/v1.0.0...v1.0.1) (2026-01-14)
 
 
