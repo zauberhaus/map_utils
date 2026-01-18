@@ -145,7 +145,8 @@ func TestSliceFuncSeq(t *testing.T) {
 		})
 
 		assert.PanicsWithError(t, "oops", func() {
-			slices.Collect(sliceSeq)
+			tmp := slices.Collect(sliceSeq)
+			assert.Empty(t, tmp)
 		})
 	})
 
@@ -164,5 +165,88 @@ func TestSliceFuncSeq(t *testing.T) {
 		})
 
 		assert.Equal(t, 1, count)
+	})
+}
+
+func TestFlattenSeq(t *testing.T) {
+	t.Run("simple map", func(t *testing.T) {
+		m := map[string]int{"a": 1, "c": 3, "b": 2}
+		seq := maps.All(m)
+
+		weighted := map_utils.FlattenSeq(seq)
+
+		result := slices.Collect(weighted)
+
+		assert.Len(t, result, 6)
+
+		pairs := [][2]any{}
+		for i := 0; i < len(result); i += 2 {
+			pairs = append(pairs, [2]any{result[i], result[i+1]})
+		}
+
+		sort.Slice(pairs, func(i, j int) bool {
+			return fmt.Sprintf("%v", pairs[i][0]) < fmt.Sprintf("%v", pairs[j][0])
+		})
+
+		expected := [][2]any{
+			{"a", 1},
+			{"b", 2},
+			{"c", 3},
+		}
+
+		assert.Equal(t, expected, pairs)
+	})
+
+	t.Run("empty map", func(t *testing.T) {
+		m := map[string]int{}
+		seq := maps.All(m)
+
+		weighted := map_utils.FlattenSeq(seq)
+
+		result := slices.Collect(weighted)
+		assert.Empty(t, result)
+	})
+
+	t.Run("mixed types", func(t *testing.T) {
+		m := map[string]any{"a": 1, "b": "hello", "c": true}
+		seq := maps.All(m)
+
+		weighted := map_utils.FlattenSeq(seq)
+
+		result := slices.Collect(weighted)
+
+		assert.Len(t, result, 6)
+
+		pairs := [][2]any{}
+		for i := 0; i < len(result); i += 2 {
+			pairs = append(pairs, [2]any{result[i], result[i+1]})
+		}
+
+		sort.Slice(pairs, func(i, j int) bool {
+			return fmt.Sprintf("%v", pairs[i][0]) < fmt.Sprintf("%v", pairs[j][0])
+		})
+
+		expected := [][2]any{
+			{"a", 1},
+			{"b", "hello"},
+			{"c", true},
+		}
+
+		assert.Equal(t, expected, pairs)
+	})
+
+	t.Run("early termination", func(t *testing.T) {
+		m := map[int]int{1: 10, 2: 20, 3: 30}
+		seq := maps.All(m)
+
+		count := 0
+		flattened := map_utils.FlattenSeq(seq)
+
+		flattened(func(v any) bool {
+			count++
+			return count < 3
+		})
+
+		assert.Equal(t, 3, count)
 	})
 }

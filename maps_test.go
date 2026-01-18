@@ -447,3 +447,83 @@ func TestSlice(t *testing.T) {
 		})
 	})
 }
+
+func TestFlatten(t *testing.T) {
+	t.Run("simple map", func(t *testing.T) {
+		m := map[string]int{"a": 1, "c": 3, "b": 2}
+		result := map_utils.Flatten(m)
+
+		assert.Len(t, result, 6)
+
+		pairs := [][2]any{}
+		for i := 0; i < len(result); i += 2 {
+			pairs = append(pairs, [2]any{result[i], result[i+1]})
+		}
+
+		sort.Slice(pairs, func(i, j int) bool {
+			return fmt.Sprintf("%v", pairs[i][0]) < fmt.Sprintf("%v", pairs[j][0])
+		})
+
+		expected := [][2]any{
+			{"a", 1},
+			{"b", 2},
+			{"c", 3},
+		}
+
+		assert.Equal(t, expected, pairs)
+	})
+
+	t.Run("empty map", func(t *testing.T) {
+		m := map[string]int{}
+		result := map_utils.Flatten(m)
+		assert.Empty(t, result)
+	})
+
+	t.Run("int key map", func(t *testing.T) {
+		m := map[int]string{1: "a", 3: "c", 2: "b"}
+		result := map_utils.Flatten(m)
+
+		assert.Len(t, result, 6)
+
+		pairs := [][2]any{}
+		for i := 0; i < len(result); i += 2 {
+			pairs = append(pairs, [2]any{result[i], result[i+1]})
+		}
+
+		sort.Slice(pairs, func(i, j int) bool {
+			return pairs[i][0].(int) < pairs[j][0].(int)
+		})
+
+		expected := [][2]any{
+			{1, "a"},
+			{2, "b"},
+			{3, "c"},
+		}
+
+		assert.Equal(t, expected, pairs)
+	})
+
+	t.Run("mixed value types", func(t *testing.T) {
+		m := map[string]any{"a": 1, "c": true, "b": "hello"}
+		result := map_utils.Flatten(m)
+
+		assert.Len(t, result, 6)
+
+		pairs := [][2]any{}
+		for i := 0; i < len(result); i += 2 {
+			pairs = append(pairs, [2]any{result[i], result[i+1]})
+		}
+
+		sort.Slice(pairs, func(i, j int) bool {
+			return fmt.Sprintf("%v", pairs[i][0]) < fmt.Sprintf("%v", pairs[j][0])
+		})
+
+		expected := [][2]any{
+			{"a", 1},
+			{"b", "hello"},
+			{"c", true},
+		}
+
+		assert.Equal(t, expected, pairs)
+	})
+}

@@ -154,3 +154,7 @@ func Join[K cmp.Ordered, V any](m map[K]V, sep string) string {
 
 	return strings.Join(entries, sep)
 }
+
+func Flatten[K cmp.Ordered, V any](m map[K]V) []any {
+	return slices.Collect(FlattenSeq(maps.All(m)))
+}

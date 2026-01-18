@@ -55,3 +55,15 @@ func SliceFuncSeq[K comparable, V any, R any](m iter.Seq2[K, V], f func(key K, v
 		}
 	}
 }
+
+func FlattenSeq[K comparable, V any](m iter.Seq2[K, V]) iter.Seq[any] {
+	return func(yield func(any) bool) {
+		for k, v := range m {
+			for _, val := range []any{k, v} {
+				if !yield(val) {
+					return
+				}
+			}
+		}
+	}
+}
