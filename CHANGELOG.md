@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/zauberhaus/map_utils/compare/v1.1.0...v1.1.1) (2026-11-16)
+
+
+### Bug Fixes
+
+* upgrade dependencies ([7739e74](https://github.com/zauberhaus/map_utils/commit/7739e74682b47fcb434fd9dffedc7aa113ae0e87))
+
 ## [1.1.0](https://github.com/zauberhaus/map_utils/compare/v1.0.1...v1.1.0) (2026-01-18)
 
 
