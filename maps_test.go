@@ -2,6 +2,7 @@
 // Licensed to Zauberhaus under one or more agreements.
 // Zauberhaus licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information.
+// cspell:words worldhello
 
 package map_utils_test
 
@@ -342,7 +343,7 @@ func TestSummarize(t *testing.T) {
 		summary := map_utils.Summarize(m, func(k, v string) string {
 			return v
 		})
-		assert.Equal(t, "helloworld", summary)
+		assert.True(t, "helloworld" == summary || "worldhello" == summary)
 	})
 
 	t.Run("empty map", func(t *testing.T) {

@@ -6,5 +6,6 @@ ignorePaths:
   - .gitignore
   - cspell.config.yaml
 words:
+  - Println
   - stretchr
   - Zauberhaus
