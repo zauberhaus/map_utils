@@ -1,2 +1,8 @@
 .vscode
 .backup
+coverage.txt
+
+node_modules
+package-lock.json
+.gitignore
+package.json
